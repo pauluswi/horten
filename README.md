@@ -37,16 +37,16 @@ This approach uses Golang's `sync.Mutex` to enforce mutual exclusion within a si
 
 ### **Code**
 - Use WaitGroup
-```
+```go
 var wg sync.WaitGroup
 
 // Process transactions concurrently
 for _, t := range transactions {
- account, exists := accounts[t.AccountNumber]
- if !exists {
-   fmt.Printf("Account %s not found\n", t.AccountNumber)
-   continue
- }
+   account, exists := accounts[t.AccountNumber]
+   if !exists {
+     fmt.Printf("Account %s not found\n", t.AccountNumber)
+     continue
+   }
 
  wg.Add(1)
  go account.ProcessTransaction(t.Amount, &wg)
@@ -54,7 +54,7 @@ for _, t := range transactions {
 ```
 
 - Use 
-```
+```go
    // ProcessTransaction processes a single transaction on the account
   func (a *Account) ProcessTransaction(amount float64, wg *sync.WaitGroup) {
   	defer wg.Done() // Notify when the goroutine is finished
