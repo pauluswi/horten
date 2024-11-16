@@ -43,6 +43,15 @@ This approach uses Golang's `sync.Mutex` to enforce mutual exclusion within a si
 - Each transaction is processed in a separate goroutine using the go keyword.
 - A ```sync.WaitGroup``` ensures the main function waits for all transactions to complete.
 - The sync.Mutex ensures that only one goroutine can update an account's balance at a time.
+
+```go
+  // Account represents a bank account
+  type Account struct {
+    	AccountNumber string
+    	Balance       float64
+    	mu            sync.Mutex // Mutex to protect the balance
+  }
+```
   
 ```go
 var wg sync.WaitGroup
@@ -60,7 +69,6 @@ for _, t := range transactions {
 }
 ```
 
-- Use 
 ```go
    // ProcessTransaction processes a single transaction on the account
   func (a *Account) ProcessTransaction(amount float64, wg *sync.WaitGroup) {
