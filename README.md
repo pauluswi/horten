@@ -2,8 +2,8 @@
 # Concurrency Handling in Golang
 
 ![Go Version](https://img.shields.io/badge/Go-1.23-blue)
+[![Go](https://github.com/pauluswi/horten/actions/workflows/go.yml/badge.svg)](https://github.com/pauluswi/horten/actions/workflows/go.yml)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-![Build Status](https://img.shields.io/github/workflow/status/pauluswi/horten/CI)
 
 
 This repository shows two approaches to handling concurrency in Golang:
