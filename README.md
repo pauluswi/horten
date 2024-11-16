@@ -131,6 +131,51 @@ This approach uses Redis to simulate distributed locking. Each critical section 
 ### **Mock**
 - To make a simple ready-to-go process, I utilize mock for redis to simulate redis without run real Redis instance.
 
+### **Code**
+- Each transaction is processed in a separate goroutine using the go keyword.
+- A ```sync.WaitGroup``` ensures the main function waits for all transactions to complete.
+- Redis SET with NX ensures that the operation is atomic, meaning the lock is created and has a TTL in a single operation.
+
+```go
+  // MockRedis simulates a Redis client with basic lock functionality
+  type MockRedis struct {
+	  data map[string]string
+	  mu   sync.Mutex
+  }
+```
+```go
+  // RedisLock represents a distributed lock
+
+  type RedisLock struct {
+	  client *MockRedis
+	  key    string
+	  value  string
+  }
+
+  // AcquireLock tries to acquire the lock
+  func (lock *RedisLock) AcquireLock(ttl time.Duration) (bool, error) {
+	  return lock.client.SetNX(lock.key, lock.value, ttl)
+  }
+
+  // ReleaseLock releases the lock
+  func (lock *RedisLock) ReleaseLock() error {
+	  val, err := lock.client.Get(lock.key)
+	  if err != nil {
+		  return fmt.Errorf("lock not found")
+	  }
+
+  // Ensure the lock is released by the process that acquired it
+	if val == lock.value {
+		_, err = lock.client.Del(lock.key)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+```
+
+
 ### Output
 ```
     Distributed Locks Output:
