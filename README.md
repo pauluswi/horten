@@ -46,7 +46,7 @@ for _, t := range transactions {
    if !exists {
      fmt.Printf("Account %s not found\n", t.AccountNumber)
      continue
-   }
+ }
 
  wg.Add(1)
  go account.ProcessTransaction(t.Amount, &wg)
