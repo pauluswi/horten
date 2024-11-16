@@ -164,7 +164,7 @@ This approach uses Redis to simulate distributed locking. Each critical section 
 
 1. **Single Process Lock (Mutex)**
    - Clone the repository.
-   - Navigate to the `mutex` example folder.
+   - Navigate to the `single` folder.
    - Run the program:
      ```bash
      go run main.go
@@ -172,7 +172,7 @@ This approach uses Redis to simulate distributed locking. Each critical section 
 
 2. **Distributed Lock (Redis)**
    - Ensure Redis is running or use the mock Redis provided.
-   - Navigate to the `redis-lock` example folder.
+   - Navigate to the `distributed\mock_redis` folder.
    - Run the program:
      ```bash
      go run main.go
