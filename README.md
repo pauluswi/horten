@@ -43,7 +43,6 @@ This approach uses Golang's `sync.Mutex` to enforce mutual exclusion within a si
 - Each transaction is processed in a separate goroutine using the go keyword.
 - A ```sync.WaitGroup``` ensures the main function waits for all transactions to complete.
 - The sync.Mutex ensures that only one goroutine can update an account's balance at a time.
-- Simulates acquiring and releasing locks without connecting to a real Redis server.
   
 ```go
   // Account represents a bank account
@@ -136,7 +135,8 @@ This approach uses Redis to simulate distributed locking. Each critical section 
 - Each transaction is processed in a separate goroutine using the go keyword.
 - A ```sync.WaitGroup``` ensures the main function waits for all transactions to complete.
 - Redis SET with NX ensures that the operation is atomic, meaning the lock is created and has a TTL in a single operation.
-
+- Simulates acquiring and releasing locks without connecting to a real Redis server.
+  
 ```go
   // MockRedis simulates a Redis client with basic lock functionality
   type MockRedis struct {
