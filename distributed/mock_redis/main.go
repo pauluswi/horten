@@ -163,17 +163,17 @@ func main() {
 
 	// Create accounts
 	accounts := map[string]*Account{
-		"12345": {AccountNumber: "12345", Balance: 1000},
-		"67890": {AccountNumber: "67890", Balance: 2000},
+		"11111": {AccountNumber: "11111", Balance: 1000},
+		"22222": {AccountNumber: "22222", Balance: 2000},
 	}
 
 	// List of transactions
 	transactions := []Transaction{
-		{"12345", -200},  // Debit
-		{"12345", 300},   // Credit
-		{"67890", -500},  // Debit
-		{"67890", -3000}, // Insufficient funds
-		{"12345", 100},   // Credit
+		{"11111", -200},  // Debit
+		{"11111", 300},   // Credit
+		{"22222", -500},  // Debit
+		{"22222", -3000}, // Insufficient funds
+		{"11111", 100},   // Credit
 	}
 
 	var wg sync.WaitGroup
