@@ -35,6 +35,46 @@ This approach uses Golang's `sync.Mutex` to enforce mutual exclusion within a si
 - Cannot be used in distributed systems.
 - Limited to processes running on a single machine.
 
+### **Code**
+- Use WaitGroup
+```
+var wg sync.WaitGroup
+
+// Process transactions concurrently
+for _, t := range transactions {
+ account, exists := accounts[t.AccountNumber]
+ if !exists {
+   fmt.Printf("Account %s not found\n", t.AccountNumber)
+   continue
+ }
+
+ wg.Add(1)
+ go account.ProcessTransaction(t.Amount, &wg)
+}
+```
+
+- Use 
+```
+   // ProcessTransaction processes a single transaction on the account
+  func (a *Account) ProcessTransaction(amount float64, wg *sync.WaitGroup) {
+  	defer wg.Done() // Notify when the goroutine is finished
+  
+  	// Lock the account to prevent race conditions
+  	a.mu.Lock()
+  	defer a.mu.Unlock()
+  
+  	if amount < 0 && a.Balance+amount < 0 {
+  		fmt.Printf("Insufficient funds for account %s\n", a.AccountNumber)
+  		return
+  	}
+  
+  	a.Balance += amount
+  	fmt.Printf("Processed transaction of %.2f on account %s. New balance: %.2f\n",
+  		amount, a.AccountNumber, a.Balance)
+  }
+
+```
+
 ### Output
 ```
      Single Machine Locks Output:
