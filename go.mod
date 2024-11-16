@@ -2,14 +2,12 @@ module horten
 
 go 1.23
 
-require github.com/go-delve/delve v1.23.1
+require (
+	github.com/cespare/xxhash/v2 v2.1.2 // indirect
+	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
+)
 
 require (
-	github.com/cilium/ebpf v0.11.0 // indirect
-	github.com/hashicorp/golang-lru v1.0.2 // indirect
-	github.com/sirupsen/logrus v1.9.3 // indirect
-	golang.org/x/arch v0.6.0 // indirect
-	golang.org/x/exp v0.0.0-20230224173230-c95f2b4c22f2 // indirect
+	github.com/go-redis/redis/v8 v8.11.5
 	golang.org/x/sys v0.17.0 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
