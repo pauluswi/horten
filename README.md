@@ -1,8 +1,8 @@
 
 # Concurrency Handling in Golang
 
-![Go Version](https://img.shields.io/github/go-mod/go-version/pauluswi/horten)
-![License](https://img.shields.io/github/license/pauluswi/horten)
+![Go Version](https://img.shields.io/badge/Go-1.23-blue)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 ![Build Status](https://img.shields.io/github/workflow/status/pauluswi/horten/CI)
 
 
