@@ -11,8 +11,12 @@ This repository shows two approaches to handling concurrency in Golang:
 1. **Single Process Lock using `sync.Mutex`**
 2. **Distributed Lock using Redis Locks**
 
-The examples simulate a bank transaction system where multiple transactions are processed concurrently while ensuring data consistency.
+### **Use Case**
 
+A banking system processes account balance updates (debits and credits) from multiple concurrent transactions. The system ensures:
+
+1. **Concurrency**: Multiple transactions are processed simultaneously.
+2. **Data Safety**: Consistency of account balances using synchronization mechanisms like mutexes.
 ---
 
 ## 1: Single Process Lock with `sync.Mutex`
@@ -36,7 +40,10 @@ This approach uses Golang's `sync.Mutex` to enforce mutual exclusion within a si
 - Limited to processes running on a single machine.
 
 ### **Code**
-- Use WaitGroup
+- Each transaction is processed in a separate goroutine using the go keyword.
+- A ```sync.WaitGroup``` ensures the main function waits for all transactions to complete.
+- The sync.Mutex ensures that only one goroutine can update an account's balance at a time.
+  
 ```go
 var wg sync.WaitGroup
 
