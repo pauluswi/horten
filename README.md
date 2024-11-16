@@ -1,6 +1,11 @@
 
 # Concurrency Handling in Golang
 
+![Go Version](https://img.shields.io/github/go-mod/go-version/pauluswi/horten)
+![License](https://img.shields.io/github/license/pauluswi/horten)
+![Build Status](https://img.shields.io/github/workflow/status/pauluswi/horten/CI)
+
+
 This repository shows two approaches to handling concurrency in Golang:
 
 1. **Single Process Lock using `sync.Mutex`**
@@ -30,7 +35,7 @@ This approach uses Golang's `sync.Mutex` to enforce mutual exclusion within a si
 - Cannot be used in distributed systems.
 - Limited to processes running on a single machine.
 
-## Output
+### Output
 ```
      Single Machine Locks Output:
 
@@ -68,10 +73,10 @@ This approach uses Redis to simulate distributed locking. Each critical section 
 - Slightly slower due to network latency.
 - More complex to implement and maintain.
 
-### **MOCK**
+### **Mock**
 - To make a simple ready-to-go process, I utilize mock for redis to simulate redis without run real Redis instance.
 
-## Output
+### Output
 ```
     Distributed Locks Output:
     
