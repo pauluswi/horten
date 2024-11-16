@@ -43,7 +43,8 @@ This approach uses Golang's `sync.Mutex` to enforce mutual exclusion within a si
 - Each transaction is processed in a separate goroutine using the go keyword.
 - A ```sync.WaitGroup``` ensures the main function waits for all transactions to complete.
 - The sync.Mutex ensures that only one goroutine can update an account's balance at a time.
-
+- Simulates acquiring and releasing locks without connecting to a real Redis server.
+  
 ```go
   // Account represents a bank account
   type Account struct {
