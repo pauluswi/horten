@@ -25,14 +25,41 @@ type Transaction struct {
 
 // RedisLock represents a distributed lock
 type RedisLock struct {
-	client *redis.Client
+	client RedisClient
 	key    string
 	value  string
 }
 
+// RedisClient defines the interface for a Redis client
+type RedisClient interface {
+	SetNX(key, value string, ttl time.Duration) (bool, error)
+	Get(key string) (string, error)
+	Del(key string) (int64, error)
+}
+
+// RedisAdapter wraps *redis.Client to implement RedisClient
+type RedisAdapter struct {
+	client *redis.Client
+}
+
+func (r *RedisAdapter) SetNX(key, value string, ttl time.Duration) (bool, error) {
+	result, err := r.client.SetNX(ctx, key, value, ttl).Result()
+	return result, err
+}
+
+func (r *RedisAdapter) Get(key string) (string, error) {
+	result, err := r.client.Get(ctx, key).Result()
+	return result, err
+}
+
+func (r *RedisAdapter) Del(key string) (int64, error) {
+	result, err := r.client.Del(ctx, key).Result()
+	return result, err
+}
+
 // AcquireLock tries to acquire the lock
 func (lock *RedisLock) AcquireLock(ttl time.Duration) (bool, error) {
-	success, err := lock.client.SetNX(ctx, lock.key, lock.value, ttl).Result()
+	success, err := lock.client.SetNX(lock.key, lock.value, ttl)
 	if err != nil {
 		return false, err
 	}
@@ -41,7 +68,7 @@ func (lock *RedisLock) AcquireLock(ttl time.Duration) (bool, error) {
 
 // ReleaseLock releases the lock
 func (lock *RedisLock) ReleaseLock() error {
-	val, err := lock.client.Get(ctx, lock.key).Result()
+	val, err := lock.client.Get(lock.key)
 	if err == redis.Nil {
 		return fmt.Errorf("lock not found")
 	} else if err != nil {
@@ -50,7 +77,7 @@ func (lock *RedisLock) ReleaseLock() error {
 
 	// Ensure the lock is released by the process that acquired it
 	if val == lock.value {
-		_, err = lock.client.Del(ctx, lock.key).Result()
+		_, err = lock.client.Del(lock.key)
 		if err != nil {
 			return err
 		}
@@ -59,7 +86,7 @@ func (lock *RedisLock) ReleaseLock() error {
 }
 
 // ProcessTransaction processes a single transaction on an account with distributed locking
-func ProcessTransaction(account *Account, transaction Transaction, rdb *redis.Client, wg *sync.WaitGroup) {
+func ProcessTransaction(account *Account, transaction Transaction, rdb RedisClient, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	lock := RedisLock{
@@ -95,10 +122,13 @@ func ProcessTransaction(account *Account, transaction Transaction, rdb *redis.Cl
 
 func main() {
 	// Initialize Redis client
-	rdb := redis.NewClient(&redis.Options{
+	redisClient := redis.NewClient(&redis.Options{
 		Addr: "localhost:6379", // Adjust based on your setup
 		DB:   0,
 	})
+
+	// Wrap Redis client with adapter
+	rdb := &RedisAdapter{client: redisClient}
 
 	// Create accounts
 	accounts := map[string]*Account{
